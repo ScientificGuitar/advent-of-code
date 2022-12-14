@@ -1,15 +1,9 @@
 from copy import deepcopy
-import functools
 
-
-def get_input():
-    """Get and parse the input."""
-    f = open("input/day13.txt", "r")
-    raw = f.read().strip()
-    pairs = raw.split("\n\n")
-    pairs = [pair.split("\n") for pair in pairs]
-    pairs = [[eval(pair[0]), eval(pair[1])] for pair in pairs]
-    return pairs
+raw = open("2022/input/day13.txt", "r").read().strip()
+pairs = raw.split("\n\n")
+pairs = [pair.split("\n") for pair in pairs]
+pairs = [[eval(pair[0]), eval(pair[1])] for pair in pairs]
 
 
 def is_right_order(left, right):
@@ -42,18 +36,6 @@ def is_right_order(left, right):
         return False
 
 
-def part1(data):
-    """Solve part 1."""
-    right_order_count = 0
-    data = deepcopy(data)
-    for pair in data:
-        left = pair[0]
-        right = pair[1]
-        if is_right_order(left, right):
-            right_order_count += data.index(pair) + 1
-    return right_order_count
-
-
 def bubbleSort(seq):
     n = len(seq)
     for _ in range(n - 1):
@@ -71,8 +53,19 @@ def bubbleSort(seq):
     return seq
 
 
-def part2(data):
-    """Solve part 2."""
+def part_one():
+    data = deepcopy(pairs)
+    right_order_count = 0
+    for pair in data:
+        left = pair[0]
+        right = pair[1]
+        if is_right_order(left, right):
+            right_order_count += data.index(pair) + 1
+    return right_order_count
+
+
+def part_two():
+    data = deepcopy(pairs)
     combined = []
     for p in data:
         combined.append(p[0])
@@ -83,17 +76,3 @@ def part2(data):
     packet1 = combined.index([[[[2]]]]) + 1
     packet2 = combined.index([[[[6]]]]) + 1
     return packet1 * packet2
-
-
-def solve():
-    """Get input and solve the different days."""
-    data = get_input()
-    solution1 = part1(data)
-    solution2 = part2(data)
-    return solution1, solution2
-
-
-if __name__ == "__main__":
-    solutions = solve()
-    print("Solutions:")
-    print("\n".join(str(solution) for solution in solutions))

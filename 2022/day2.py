@@ -1,15 +1,11 @@
-def get_input():
-    """Get and parse the input."""
-    f = open("input/day2.txt", "r")
-    raw = f.read().strip()
-    games = [[hands for hands in game.split()] for game in raw.split("\n")]
-    return games
+raw = open("2022/input/day2.txt", "r").read().strip()
+
+games = [[hands for hands in game.split()] for game in raw.split("\n")]
 
 
-def part1(data):
-    """Solve part 1."""
+def part_one():
     score = 0
-    for opp, me in data:
+    for opp, me in games:
         opp = "ABC".index(opp)
         me = "XYZ".index(me)
         score += me + 1
@@ -20,10 +16,9 @@ def part1(data):
     return score
 
 
-def part2(data):
-    """Solve part 2."""
+def part_two():
     score = 0
-    for opp, result in data:
+    for opp, result in games:
         opp = "ABC".index(opp)
         result = "XYZ".index(result)
         score += result * 3
@@ -34,17 +29,3 @@ def part2(data):
         elif result == 2:
             score += ((opp + 1) % 3) + 1
     return score
-
-
-def solve():
-    """Get input and solve the different days."""
-    data = get_input()
-    solution1 = part1(data)
-    solution2 = part2(data)
-    return solution1, solution2
-
-
-if __name__ == "__main__":
-    solutions = solve()
-    print("Solutions:")
-    print("\n".join(str(solution) for solution in solutions))

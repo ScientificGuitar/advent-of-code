@@ -1,5 +1,4 @@
 raw = open("2022/input/day1.txt", "r").read().strip()
-
 calories = [
     sum([int(calorie) for calorie in elf.split("\n")]) for elf in raw.split("\n\n")
 ]

@@ -1,30 +1,25 @@
 import numpy as np
 
 
-def get_input():
-    """Get and parse the input."""
-    f = open("input/day8.txt", "r")
-    raw = f.read().strip()
-    trees = np.array([[int(tree) for tree in row] for row in raw.split("\n")])
-    return trees
+raw = open("2022/input/day8.txt", "r").read().strip()
+trees = np.array([[int(tree) for tree in row] for row in raw.split("\n")])
 
 
-def part1(data):
-    """Solve part 1."""
-    visibility = np.zeros((data.shape), dtype=int)
-    for row in range(len(data)):
+def part_one():
+    visibility = np.zeros((trees.shape), dtype=int)
+    for row in range(len(trees)):
         max = -1
         max_reversed = -1
-        for col in range(len(data[row])):
-            if data[row][col] > max:
-                max = data[row][col]
+        for col in range(len(trees[row])):
+            if trees[row][col] > max:
+                max = trees[row][col]
                 visibility[row][col] += 1
 
-            reversed_row = list(reversed(data[row]))
+            reversed_row = list(reversed(trees[row]))
             if reversed_row[col] > max_reversed:
                 max_reversed = reversed_row[col]
                 visibility[row][len(reversed_row) - col - 1] += 1
-    data_t = np.transpose(data)
+    data_t = np.transpose(trees)
     visibility = np.transpose(visibility)
     for row in range(len(data_t)):
         max = -1
@@ -40,14 +35,13 @@ def part1(data):
     return np.count_nonzero(visibility)
 
 
-def part2(data):
-    """Solve part 2."""
-    up = np.zeros((data.shape), dtype=int)
-    down = np.zeros((data.shape), dtype=int)
-    left = np.zeros((data.shape), dtype=int)
-    right = np.zeros((data.shape), dtype=int)
-    for row in range(len(data)):
-        tree_row = data[row]
+def part_two():
+    up = np.zeros((trees.shape), dtype=int)
+    down = np.zeros((trees.shape), dtype=int)
+    left = np.zeros((trees.shape), dtype=int)
+    right = np.zeros((trees.shape), dtype=int)
+    for row in range(len(trees)):
+        tree_row = trees[row]
         for col in range(len(tree_row) - 1):
             view = 0
             for i in range(col + 1, len(tree_row)):
@@ -57,7 +51,7 @@ def part2(data):
                     view += 1
                     break
             right[row][col] = view
-        reversed_row = list(reversed(data[row]))
+        reversed_row = list(reversed(trees[row]))
         for col in range(len(reversed_row) - 1):
             view = 0
             for i in range(col + 1, len(reversed_row)):
@@ -67,7 +61,7 @@ def part2(data):
                     view += 1
                     break
             left[row][len(reversed_row) - col - 1] = view
-    data_t = np.transpose(data)
+    data_t = np.transpose(trees)
     for row in range(len(data_t)):
         tree_row = data_t[row]
         for col in range(len(tree_row) - 1):
@@ -92,17 +86,3 @@ def part2(data):
             up[row][len(reversed_row) - col - 1] = view
     scene_score = right * left * down.T * up.T
     return np.max(scene_score)
-
-
-def solve():
-    """Get input and solve the different days."""
-    data = get_input()
-    solution1 = part1(data)
-    solution2 = part2(data)
-    return solution1, solution2
-
-
-if __name__ == "__main__":
-    solutions = solve()
-    print("Solutions:")
-    print("\n".join(str(solution) for solution in solutions))
